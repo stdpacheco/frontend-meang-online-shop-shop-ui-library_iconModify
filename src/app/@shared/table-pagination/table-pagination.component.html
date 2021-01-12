@@ -1,0 +1,101 @@
+<button
+  class="btn btn-success float-right mr-3 mb-2"
+  (click)="manageAction('add', '')"
+>
+  <i class="fas fa-plus-circle"></i> &nbsp; Añadir
+</button>
+<select
+  class="custom-select float-right mr-3 mb-2"
+  style="width: auto;"
+  [(ngModel)]="filterValues"
+  (ngModelChange)="loadData()"
+>
+  <option [ngValue]="'ALL'">Todos</option>
+  <option [ngValue]="'ACTIVE'">Activos</option>
+  <option [ngValue]="'INACTIVE'">Inactivos</option>
+</select>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" *ngFor="let column of tableColumns">
+          {{ column.label }}
+        </th>
+        <th scope="col">Gestionar Información</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of data$ | async">
+        <td *ngFor="let val of tableColumns">
+          <span *ngIf="val.property != 'active'; else activeValue">
+            {{ data[val.property] }}
+          </span>
+          <ng-template #activeValue>
+            <i
+              class="fas fa-check-circle"
+              *ngIf="data[val.property] != false"
+            ></i>
+            <i
+              class="fas fa-times-circle"
+              *ngIf="data[val.property] == false"
+            ></i>
+          </ng-template>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="manageAction('edit', data)"
+          >
+            <i class="fas fa-edit"></i></button
+          >&nbsp;
+          <button
+            type="button"
+            class="btn btn-info"
+            (click)="manageAction('info', data)"
+          >
+            <i class="fas fa-info"></i></button
+          >&nbsp;
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="manageAction('block', data)"
+            *ngIf="data['active'] != false; else unblockBtn"
+          >
+            <i class="fas fa-lock"></i>
+          </button>
+          <ng-template #unblockBtn>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="manageAction('unblock', data)"
+            >
+              <i class="fas fa-unlock"></i>
+            </button>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination
+    [collectionSize]="infoPage.total"
+    [(page)]="infoPage.page"
+    (pageChange)="changePage()"
+    [pageSize]="infoPage.itemsPage"
+  >
+  </ngb-pagination>
+
+  <select
+    class="custom-select"
+    style="width: auto;"
+    [(ngModel)]="infoPage.itemsPage"
+    (ngModelChange)="loadData()"
+  >
+    <option [ngValue]="5">5 items per page</option>
+    <option [ngValue]="10">10 items per page</option>
+    <option [ngValue]="15">15 items per page</option>
+    <option [ngValue]="20">20 items per page</option>
+  </select>
+</div>

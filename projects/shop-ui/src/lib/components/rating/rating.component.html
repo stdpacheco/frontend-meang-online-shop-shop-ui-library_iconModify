@@ -1,0 +1,6 @@
+<div *ngIf="starsCssValues && rating.value">
+  <span *ngFor="let v of starsCssValues; let i = index">
+    <i [class]="classfontIcon" [ngClass]="{ checked: rating.value >= i + 1 }"></i>
+  </span>
+  {{ rating.value }} ({{ rating.count }})
+</div>

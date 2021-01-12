@@ -1,0 +1,45 @@
+<div class="product-grid">
+  <div class="product-image">
+    <a (click)="showDetails(product)">
+      <img src="{{ product.img }}" class="pic-1" [alt]="product.name" />
+    </a>
+  </div>
+  <div class="product-content">
+    <h3 class="title">{{ product.name | truncate: 25 }}</h3>
+    <p *ngIf="showDesc">
+      {{ product.description | truncate: 40 }}
+    </p>
+    <div>
+      <ng-template #noDiscount>
+        <div class="price">
+          {{ selectCurrency }} {{ product.price | number }}
+        </div>
+      </ng-template>
+      <div class="price" *ngIf="product.discount; else noDiscount">
+        {{ selectCurrency }} {{ product.priceDiscount | number }}
+        <span >
+          {{ selectCurrency }}  {{ product.price | number }}
+          <span class="discount-percentage">({{ product.discount }}%)</span>
+        </span>
+      </div>
+    </div>
+    <shop-rating *ngIf="product.rating" [rating]="product.rating"></shop-rating>
+  </div>
+  <ul class="social">
+    <!--<li><a href="" data-tip="Añadir a lista de deseos"><i class="fa fa-shopping-bag"></i></a></li>-->
+    <li>
+      <a
+        class="item-button-options"
+        (click)="addToCart(product)"
+        data-tip="Añadir a la cesta"
+        ><i class="fas fa-cart-plus"></i
+      ></a>
+    </li>
+    <li>
+      <a class="item-button-options"
+        (click)="showDetails(product)" data-tip="Detalles del producto"
+        ><i class="fas fa-info"></i
+      ></a>
+    </li>
+  </ul>
+</div>
